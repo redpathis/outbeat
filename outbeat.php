@@ -20,18 +20,17 @@ class Outbeat
 
   function __construct() {
       if (!$this->getFile()){
-        $this->error = true;
+        //$this->error = true;
         $this->updateFile();
+      } 
+      $obj = json_decode($this->content);
+      $this->now = time();
+      $this->stamp = $obj->{'last'};
+      $this->diff = $this->now - $this->stamp;
+      if ($this->diff > $this->timeout){
+        $this->state_ok = false;
       } else {
-        $obj = json_decode($this->content);
-        $this->now = time();
-        $this->stamp = $obj->{'last'};
-        $this->diff = $this->now - $this->stamp;
-        if ($this->diff > $this->timeout){
-          $this->state_ok = false;
-        } else {
-          $this->state_ok = true;
-        }
+        $this->state_ok = true;
       }
   }
 
@@ -99,7 +98,7 @@ if (isset($_REQUEST['token'])){
   $ob = new Outbeat();
 
   if ($ob->error){
-    echo "error_";
+    echo "error";
     exit();
   }
 
