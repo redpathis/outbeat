@@ -3,7 +3,7 @@
 define("UPDATE_TOKEN", "B1JHLGLJ4GJKJ0WPDWZ2XRQGNWKK9MSCPTHA");
 define("READJSON_TOKEN", "TN82CUD7E6C6");
 define("READ_TOKEN", "SGVQZ5KXC7QM");
-define("FILENAME", "stamp.json");
+define("FILENAME", "/tmp/stamp.json");
 define("TIMEOUT", 2*60);
 
 class Outbeat
@@ -21,6 +21,7 @@ class Outbeat
   function __construct() {
       if (!$this->getFile()){
         $this->error = true;
+        $this->updateFile();
       } else {
         $obj = json_decode($this->content);
         $this->now = time();
@@ -55,6 +56,7 @@ class Outbeat
   }
 
   function responseObject($wrote){
+    $result = (object) [ ];
     $result->{'last'} = $this->stamp;
     $result->{'now'} = $this->now;
     $result->{'wrote'} = $wrote;
@@ -97,7 +99,7 @@ if (isset($_REQUEST['token'])){
   $ob = new Outbeat();
 
   if ($ob->error){
-    echo "error";
+    echo "error_";
     exit();
   }
 
